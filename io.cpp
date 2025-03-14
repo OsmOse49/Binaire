@@ -73,7 +73,7 @@ void menu()
         exit(0);
     }
     }
-        while(choix > 4);
+        while(choix <= 4);
 
     
 }

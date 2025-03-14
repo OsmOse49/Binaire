@@ -1,7 +1,7 @@
 
 #include <iostream>
 #include <cmath>
-#include "header.cpp"
+#include "header.h"
 #include "Projet.cpp"
 #include "io.cpp"
 
