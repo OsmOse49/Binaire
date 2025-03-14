@@ -3,8 +3,9 @@
 #include <cmath>
 #include "header.cpp"
 #include "Projet.cpp"
+#include "io.cpp"
 
-
+using namespace std;
 int main() {
     // Initialisation des conditions initiales
     x = 1.496e11;  
@@ -13,6 +14,7 @@ int main() {
     vy = 29800;    
     ax = 0;
     ay = 0;
+void menu();
 void calcul(double x, double y, double &ax, double &ay);
 void retour(double &vx, double &vy, double &x, double &y, double ax, double ay);
 
@@ -22,6 +24,6 @@ void retour(double &vx, double &vy, double &x, double &y, double ax, double ay);
 
         std::cout << "Temps : " << i * dt << " s, Position : (" << x << ", " << y << ")\n";
     }
-
+menu();
     return 0;
 }

@@ -1,6 +1,7 @@
 #include <iostream>
 #include <cmath>
 
+using namespace std;
 // Constantes physiques
 const double G = 6.67430e-11; 
 const double M1 = 3e30; 
@@ -29,13 +30,3 @@ void retour(double &vx, double &vy, double &x, double &y, double ax, double ay) 
 }
 
 
-//Creation du menu:
-void menu()
-{
-    int choix=0;
-    do{
-        cout<<"Que desirez-vous faire ?"<<endl;
-        cout<<"Saisissez le numero correspondant a votre choix"<<endl;
-        cout<<"1."
-    }
-}
