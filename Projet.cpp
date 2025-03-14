@@ -28,22 +28,14 @@ void retour(double &vx, double &vy, double &x, double &y, double ax, double ay) 
     y += vy * dt;
 }
 
-int main() {
-    // Initialisation des conditions initiales
-    x = 1.496e11;  
-    y = 0;
-    vx = 0;
-    vy = 29800;    
-    ax = 0;
-    ay = 0;
 
-
-    for (int i = 0; i < 1000; ++i) {
-        calcul(x, y, ax, ay);
-        retour(vx, vy, x, y, ax, ay);
-
-        std::cout << "Temps : " << i * dt << " s, Position : (" << x << ", " << y << ")\n";
+//Creation du menu:
+void menu()
+{
+    int choix=0;
+    do{
+        cout<<"Que desirez-vous faire ?"<<endl;
+        cout<<"Saisissez le numero correspondant a votre choix"<<endl;
+        cout<<"1."
     }
-
-    return 0;
 }
