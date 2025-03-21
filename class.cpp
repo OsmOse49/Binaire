@@ -1,3 +1,5 @@
+#ifndef CLASS_CPP
+#define CLASS_CPP
 #include "class.h"
 #include <cmath>
 
@@ -30,6 +32,25 @@ void etoile::creeretoile() {
     vy = 0;
 }
 
+void etoile::set_mass(){
+    double newm;
+    cout<<"Quelle est la nouvelle masse de l'etoile ?";
+    cin>>newm;
+    m=newm;
+
+}
+void etoile::set_x(){
+    double newx;
+    cout<<"Quelle est la nouvelle poisition x de l'etoile ?";
+    cin>>newx;
+    x=newx;
+}
+void etoile::set_y(){
+    double newy;
+    cout<<"Quelle est la nouvelle position y de l'etoile ?";
+    cin>>newy;
+    y=newy;
+}
 void etoile::set_vitesse(double v_x, double v_y) {
     vx = v_x;
     vy = v_y;
@@ -46,4 +67,4 @@ void etoile::calcul_acceleration(double ax, double ay) {
 }
 
 
-
+#endif

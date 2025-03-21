@@ -25,7 +25,9 @@ public:
 
     void afficheetoile(); // Affichage de l'étoile
     void creeretoile();   // Création de l'étoile
-
+    void set_mass();
+    void set_x();
+    void set_y();
     void set_vitesse(double vx, double vy); // Setter pour la vitesse
     void mise_a_jour_position(double dt); // Met à jour la position après un petit intervalle de temps
     void calcul_acceleration(double ax, double ay); // Calcule l'accélération

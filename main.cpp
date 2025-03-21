@@ -1,11 +1,12 @@
 #include "class.h"
+#include "class.cpp"
 #include <iostream>
 #include <cmath>
 #include <vector>
-
+#include "io.cpp"
 using namespace std;
 
-const double G = 6.67430e-11;  // Constante gravitationnelle
+
 
 int main() {
     etoile e1, e2;
@@ -47,6 +48,6 @@ int main() {
         cout << "Etoile 1 - Position: (" << positions_e1[i].first << ", " << positions_e1[i].second << ")\n";
         cout << "Etoile 2 - Position: (" << positions_e2[i].first << ", " << positions_e2[i].second << ")\n";
     }
-
+menu();
     return 0;
 }
