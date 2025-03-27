@@ -1,16 +1,19 @@
 #include "class.h"
+#include "class.cpp"
 #include <iostream>
 #include <cmath>
+#include <string>
 #include <vector>
-
+#include "io.cpp"
 using namespace std;
 
-const double G = 6.67430e-11;  // Constante gravitationnelle
+
 
 int main() {
     etoile e1, e2;
     e1.creeretoile();
     e2.creeretoile();
+    
 
     double dt = 1e3;  // Pas de temps (en secondes)
     double r, fx, fy;
@@ -47,6 +50,7 @@ int main() {
         cout << "Etoile 1 - Position: (" << positions_e1[i].first << ", " << positions_e1[i].second << ")\n";
         cout << "Etoile 2 - Position: (" << positions_e2[i].first << ", " << positions_e2[i].second << ")\n";
     }
+menu(e1,e2,positions_e1,positions_e2);
 
     return 0;
 }
