@@ -2,6 +2,7 @@
 #include "class.cpp"
 #include <iostream>
 #include <cmath>
+#include <string>
 #include <vector>
 #include "io.cpp"
 using namespace std;
@@ -48,6 +49,6 @@ int main() {
         cout << "Etoile 1 - Position: (" << positions_e1[i].first << ", " << positions_e1[i].second << ")\n";
         cout << "Etoile 2 - Position: (" << positions_e2[i].first << ", " << positions_e2[i].second << ")\n";
     }
-menu();
+menu(positions_e1,positions_e2);
     return 0;
 }

@@ -2,10 +2,12 @@
 #define CLASS_CPP
 #include "class.h"
 #include <cmath>
+#include <string>
+using namespace std;
 
 const double G = 6.67430e-11;  // Constante gravitationnelle
 
-etoile::etoile() : m(0), x(0), y(0), vx(0), vy(0) {}
+etoile::etoile() : m(0), x(0), y(0), vx(0), vy(0), nom (""){}
 
 etoile::~etoile() {}
 
