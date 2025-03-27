@@ -8,12 +8,11 @@ using namespace std;
 
 //Nouvelles variables
 double dt = 1e3;
-etoile e1, e2;
 double r, fx, fy;
 
 
 //Creation du menu:
-void menu(vector<pair<double, double>>& positions_e1, vector<pair<double, double>>& positions_e2)
+void menu(etoile e1, etoile e2,vector<pair<double, double>>& positions_e1, vector<pair<double, double>>& positions_e2)
 {
     int choix=0;
     do{
@@ -32,7 +31,7 @@ void menu(vector<pair<double, double>>& positions_e1, vector<pair<double, double
     if (choix != 1 && choix != 2 && choix !=3 && choix !=4 && choix !=5 && choix !=6 && choix !=7)
     {
         cout<<"choix invalide, veuillez ressaisir un numéro"<<endl;
-        return menu(positions_e1,positions_e2);
+        return menu(e1,e2,positions_e1,positions_e2);
     }
     if(choix ==1)
     {   
