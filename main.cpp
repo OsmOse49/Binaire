@@ -10,11 +10,15 @@ using namespace std;
 
 
 int main() {
+    
+    
+
+    // Creation des etoiles
     etoile e1, e2;
     e1.creeretoile();
     e2.creeretoile();
     
-
+    
     double dt = 1e3;  // Pas de temps (en secondes)
     double r, fx, fy;
     vector<pair<double, double>> positions_e1, positions_e2; // Vecteurs pour stocker les positions
@@ -25,6 +29,8 @@ int main() {
 
     // Boucle de simulation
     for (int i = 0; i < 10000; ++i) {
+        
+        
         // Calculer la distance entre les deux étoiles
         r = sqrt(pow(e2.getx() - e1.getx(), 2) + pow(e2.gety() - e1.gety(), 2));
 
