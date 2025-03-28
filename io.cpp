@@ -134,8 +134,7 @@ if (choix==4)
         exit(0);
     }
     
- } while(choix !=1 && choix !=2 && choix !=3 && choix !=4 && choix !=5 && choix !=6 && choix !=7);
-
+ 
         for (int i = 0; i < 10000; ++i) {
             // Calculer la distance entre les deux étoiles
             r = sqrt(pow(e2.getx() - e1.getx(), 2) + pow(e2.gety() - e1.gety(), 2));
@@ -155,9 +154,11 @@ if (choix==4)
             // Stocker les positions pour le tracé
             positions_e1.push_back({e1.getx(), e1.gety()});
             positions_e2.push_back({e2.getx(), e2.gety()});
-        
-    
-
     
     }
+    for (int i = 0; i < positions_e1.size(); i++) {
+        cout << "Etoile 1 - Position: (" << positions_e1[i].first << ", " << positions_e1[i].second << ")\n";
+        cout << "Etoile 2 - Position: (" << positions_e2[i].first << ", " << positions_e2[i].second << ")\n";
+    }
+    } while(choix !=1 && choix !=2 && choix !=3 && choix !=4 && choix !=5 && choix !=6 && choix !=7);
 }
