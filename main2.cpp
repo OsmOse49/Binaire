@@ -19,19 +19,18 @@ int main() {
     std::cin >> star1.mass;
     std::cout << "Entrez la position de la première étoile (x, y, z) en mètres : ";
     std::cin >> star1.position.x >> star1.position.y >> star1.position.z;
-    std::cout << "Entrez la vitesse de la première étoile (vx, vy, vz) en m/s : ";
-    std::cin >> star1.velocity.vx >> star1.velocity.vy >> star1.velocity.vz;
 
     // Demander les paramètres pour la deuxième étoile
     std::cout << "Entrez la masse de la deuxième étoile (en kg) : ";
     std::cin >> star2.mass;
     std::cout << "Entrez la position de la deuxième étoile (x, y, z) en mètres : ";
     std::cin >> star2.position.x >> star2.position.y >> star2.position.z;
-    std::cout << "Entrez la vitesse de la deuxième étoile (vx, vy, vz) en m/s : ";
-    std::cin >> star2.velocity.vx >> star2.velocity.vy >> star2.velocity.vz;
 
-    double dt = 6000; // Pas de temps en secondes
-    double totalTime = 365.25 * 24 * 3600; // Simuler pendant 1 an 
+    // Calculer les vitesses orbitales des étoiles
+    calculateOrbitalVelocities(star1, star2);
+
+    double dt = 8000; // Pas de temps en secondes
+    double totalTime = 365.25 * 24 * 7200; // Simuler pendant 1 an 
 
     // Boucle pour mettre à jour les positions et vitesses
     for (double t = 0; t < totalTime; t += dt) {

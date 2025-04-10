@@ -57,7 +57,7 @@ def update(frame):
     return star1_plot, star2_plot
 
 # Création de l'animation
-ani = animation.FuncAnimation(fig, update, frames=len(time), init_func=init, blit=True, interval=50)
+ani = animation.FuncAnimation(fig, update, frames=len(time), init_func=init, blit=True, interval=10)
 
 # Afficher l'animation
 plt.show()

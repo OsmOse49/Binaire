@@ -29,6 +29,40 @@ Position gravitationalForce(const Star& star1, const Star& star2) {
     return force;
 }
 
+void calculateOrbitalVelocities(Star& star1, Star& star2) {
+    // Vecteur de séparation
+    double dx = star2.position.x - star1.position.x;
+    double dy = star2.position.y - star1.position.y;
+    double dz = star2.position.z - star1.position.z;
+    double r = sqrt(dx*dx + dy*dy + dz*dz);
+
+    // Unité perpendiculaire au vecteur de séparation (plan XY uniquement)
+    double ux = -dy / r;
+    double uy = dx / r;
+
+    // Centre de masse (CM)
+    double totalMass = star1.mass + star2.mass;
+    double r1 = (star2.mass / totalMass) * r;
+    double r2 = (star1.mass / totalMass) * r;
+
+    // Vitesse nécessaire pour orbite circulaire
+    double v = sqrt(G * totalMass / r); // vitesse relative
+
+    // Chaque étoile tourne autour du CM, donc leurs vitesses sont proportionnelles à leurs distances au CM
+    double v1 = v * (r1 / r);
+    double v2 = v * (r2 / r);
+
+    // Appliquer les vitesses perpendiculaires à la ligne de séparation
+    star1.velocity.vx = ux * v1;
+    star1.velocity.vy = uy * v1;
+    star1.velocity.vz = 0;
+
+    star2.velocity.vx = -ux * v2;
+    star2.velocity.vy = -uy * v2;
+    star2.velocity.vz = 0;
+}
+
+
 // Fonction pour mettre à jour la position et la vitesse d'une étoile selon la force gravitationnelle
 void updateStar(Star& star, const Position& force, double dt) {
     // Accélération : F = ma => a = F / m
@@ -44,6 +78,7 @@ void updateStar(Star& star, const Position& force, double dt) {
     star.position.y += star.velocity.vy * dt;
     star.position.z += star.velocity.vz * dt;
 }
+
 
 // Fonction pour enregistrer les données dans un fichier
 void writeToFile(std::ofstream& file, double time, const Star& star1, const Star& star2) {

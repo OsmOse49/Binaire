@@ -40,4 +40,7 @@ void updateStar(Star& star, const Position& force, double dt);
 // Fonction pour enregistrer les données dans un fichier
 void writeToFile(std::ofstream& file, double time, const Star& star1, const Star& star2);
 
+// Déclaration de la fonction pour calculer les vitesses orbitales
+void calculateOrbitalVelocities(Star& star1, Star& star2);
+
 #endif // CLASS_H
