@@ -5,15 +5,15 @@
 #include <string>
 using namespace std;
 
-const double G = 6.67430e-11;  // Constante gravitationnelle
-double c= 3*10e8; //celerite
 
-etoile::etoile() : m(0), x(0), y(0), vx(0), vy(0), r(0),nom (""){}
+
+etoile::etoile() : m(0), x(0), y(0), z(0), vx(0), vy(0), vz(0), r(0),nom (""){}
 
 etoile::~etoile() {}
 
-double etoile::getx() { return x; }
-double etoile::gety() { return y; }
+double etoile::getx() const { return x; }
+double etoile::gety() const { return y; }
+double etoile::getz() const { return z; }
 double etoile::getmass() { return m; }
 double etoile::getr() { return r; }
 string etoile::getnom() { return nom; }
@@ -29,6 +29,8 @@ void etoile::creeretoile() {
     cin >> x;
     cout << "Quelle est la position y de l'etoile ? ";
     cin >> y;
+    cout << "Quelle est la position z de l'etoile ? ";
+    cin >> z;
     cout << "Quelle est la masse de l'etoile ? ";
     cin >> m;
     cout<<"Quel est le rayon de l'etoile ?";
@@ -36,6 +38,7 @@ void etoile::creeretoile() {
     // Initialisation des vitesses à zéro
     vx = 0;
     vy = 0;
+    vz = 0;
 }
 
 void etoile::set_mass(){
@@ -57,42 +60,80 @@ void etoile::set_y(){
     cin>>newy;
     y=newy;
 }
-void etoile::set_vitesse(double v_x, double v_y) {
-    vx = v_x;
-    vy = v_y;
+void etoile::set_z(){
+    double newz;
+    cout<<"Quelle est la nouvelle position z de l'etoile ?";
+    cin>>newz;
+    z=newz;
 }
 
-void etoile::mise_a_jour_position(double dt) {
-    x += vx * dt;
-    y += vy * dt;
+
+double etoile::pulsation(const etoile& e1, const etoile& e2) {
+    return sqrt(G * massetot(e1, e2) / pow(e1.r, 3));
 }
 
-void etoile::calcul_acceleration(double ax, double ay) {
-    vx += ax;
-    vy += ay;
+double etoile::ratiomasse(const etoile& e1, const etoile& e2) {
+    return (e1.m * e2.m) / pow(e1.m + e2.m, 2);
 }
 
-double etoile::pulsation (etoile e1, etoile e2) // pulsation de l'etoile 1 (e1,e2), de l'etoile 2 (e2,e1)
-{
-    double w =sqrt((G*massetot(e1,e2))/pow(e1.r,3));
-    return w; 
-}
-double etoile::ratiomasse(etoile e1, etoile e2)
-{
-    double n=(e1.getmass()*e2.getmass())/pow(e1.getmass()+e2.getmass(),2);
-    return n;
+double etoile::massetot(const etoile& e1, const etoile& e2) {
+    return e1.m + e2.m;
 }
 
-double etoile::massetot(etoile e1, etoile e2)
-{
-    double M=e1.getmass()+e2.getmass();
-    return M;
+double etoile::energieOG(const etoile& e1, const etoile& e2) {
+    double w = pulsation(e1, e2);
+    double mr = massetot(e1, e2) * ratiomasse(e1, e2);
+    return (2.0 / 5.0) * pow(G * mr, 2) * pow(e1.r, 4) * pow(w, 6) / pow(c, 5);
 }
-double etoile::energieOG (etoile e1, etoile e2)
-{
-    double E= (2/5)*(G*pow(massetot(e1,e2)*ratiomasse(e1,e2),2)*pow(e1.r,4)*pow(pulsation(e1,e2),6))/pow(c,4);
-    return E;
-}
+
    
+// Fonction pour calculer la distance entre deux positions
+double distance(const etoile& e1, const etoile& e2)
+{
+     return sqrt(pow(e2.getx() - e1.getx(), 2) + 
+                pow(e2.gety() - e1.gety(), 2) + 
+                pow(e2.getz() - e1.getz(), 2));
+}
 
+// Fonction pour calculer la force gravitationnelle entre deux étoiles
+Position gravitationalForce(const etoile& e1, const etoile& e2) {
+    double r = distance(e1, e2);
+    double f = G * e1.m * e2.m / (r * r);
+    Position force = {
+        f * (e2.x - e1.x) / r,
+        f * (e2.y - e1.y) / r,
+        f * (e2.z - e1.z) / r
+    };
+    return force;
+}
+
+void calculateOrbitalVelocities(etoile& e1, etoile& e2) {
+   double dx = e2.x - e1.x, dy = e2.y - e1.y, dz = e2.z - e1.z;
+    double r = sqrt(dx * dx + dy * dy + dz * dz);
+    double ux = -dy / r, uy = dx / r;
+    double M = e1.m + e2.m;
+    double r1 = (e2.m / M) * r;
+    double r2 = (e1.m / M) * r;
+    double v = sqrt(G * M / r);
+    e1.vx = ux * v * (r1 / r); e1.vy = uy * v * (r1 / r);
+    e2.vx = -ux * v * (r2 / r); e2.vy = -uy * v * (r2 / r);
+
+}
+
+
+// Fonction pour mettre à jour la position et la vitesse d'une étoile selon la force gravitationnelle
+void updateStar(etoile& e, const Position& force, double dt) {
+ Position a = {force.x / e.m, force.y / e.m, force.z / e.m};
+    e.vx += a.x * dt; e.vy += a.y * dt; e.vz += a.z * dt;
+    e.x += e.vx * dt; e.y += e.vy * dt; e.z += e.vz * dt;
+
+}
+
+
+// Fonction pour enregistrer les données dans un fichier
+void writeToFile(std::ofstream& file, double time, const etoile& e1, const etoile& e2) {
+    file << time << " " 
+         << e1.x / AU << " " << e1.y / AU << " " << e1.z / AU << " "
+         << e2.x / AU << " " << e2.y / AU << " " << e2.z / AU << "\n";
+}
 #endif
