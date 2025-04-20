@@ -41,7 +41,7 @@ int main() {
 
         // Calculer les nouvelles positions et vitesses des deux étoiles avec RK4 (mise à jour croisée)
         etoile newE1 = updateStarReturnRK4(e1, force, dt, e2);
-        etoile newE2 = updateStarReturnRK4(e2, {-force.x, -force.y, -force.z}, dt, e1);
+        etoile newE2 = updateStarReturnRK4(e2, {-force.getx(), -force.gety(), -force.getz()}, dt, e1);
 
         // Mise à jour des vraies étoiles après calculs
         e1 = newE1;
@@ -56,10 +56,9 @@ int main() {
     // Fermer le fichier
     dataFile.close();
 
-    std::cout << "Données enregistrées dans data.txt." << std::endl;
+    std::cout << "Les Donnees ont ete enregistrees dans data.txt avec succes." << std::endl << std::endl;
 
 menu(e1,e2);
 
     return 0;
 }
-

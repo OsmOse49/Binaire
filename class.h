@@ -7,6 +7,8 @@
 
 using namespace std;
 
+// Le header permet de déclarer les classes et fonctions
+
 const double G = 6.67430e-11;
 const double AU = 1.496e11;
 const double M_SUN = 1.989e30;
@@ -17,23 +19,43 @@ struct Velocity {
 };
 
 struct Position {
+private:
     double x, y, z;
+public:
+    Position();
+    Position(double a,double b, double c);
+    ~Position();
+    double& getx() { return x; }; // Retourne une référence pour modification
+    double& gety() { return y; };
+    double& getz() { return z; };
+
+    const double& getx() const { return x; }; // Const pour l'accès en lecture seulement
+    const double& gety() const { return y; };
+    const double& getz() const { return z; };
+
+    void setx(double val) { x = val; };
+    void sety(double val) { y = val; };
+    void setz(double val) { z = val; };
 };
 
 
+
 class etoile {
-public:
+private:
     double m, x, y, z, vx, vy, vz, r;
     string nom;
-
+public:
     etoile();
     ~etoile();
     double getx()const;
     double gety()const;
     double getz()const;
-    double getmass();
-    double getr();
-    string getnom();
+    double getvx()const;
+    double getvy()const;
+    double getvz()const;
+    double getmass()const;
+    double getr()const;
+    string getnom()const;
 
     void creeretoile();
     void afficheetoile();
@@ -41,6 +63,14 @@ public:
     void set_x();
     void set_y();
     void set_z();
+    void setvx(double newvx);
+    void setvy(double newvy);
+    void setvz(double newvz);
+    void setx(double newx);
+    void sety(double newy);
+    void setz(double newz);
+    
+
 
     double pulsation(const etoile& e1, const etoile& e2);
     double ratiomasse(const etoile& e1, const etoile& e2);
