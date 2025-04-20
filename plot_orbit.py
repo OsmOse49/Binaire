@@ -2,6 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import matplotlib.animation as animation
 
+
 # Spécifier le chemin du fichier data.txt
 file_path = '/home/utilisateur/Documents/M1 /Entrainement /Binaire/data.txt'
 
@@ -56,9 +57,8 @@ def update(frame):
     star2_plot.set_offsets(np.array([[star2_x[frame], star2_y[frame]]]))
     return star1_plot, star2_plot
 
-# Création de l'animation
-ani = animation.FuncAnimation(fig, update, frames=len(time), init_func=init, blit=True, interval=10)
+# Créer l'animation avec un intervalle de 100 ms et mise à jour tous les 10 frames
+ani = animation.FuncAnimation(fig, update, frames=range(0, len(time), 10), init_func=init, blit=False, interval=100)
 
 # Afficher l'animation
 plt.show()
-

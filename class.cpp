@@ -68,25 +68,7 @@ void etoile::set_z(){
 }
 
 
-double etoile::pulsation(const etoile& e1, const etoile& e2) {
-    return sqrt(G * massetot(e1, e2) / pow(e1.r, 3));
-}
 
-double etoile::ratiomasse(const etoile& e1, const etoile& e2) {
-    return (e1.m * e2.m) / pow(e1.m + e2.m, 2);
-}
-
-double etoile::massetot(const etoile& e1, const etoile& e2) {
-    return e1.m + e2.m;
-}
-
-double etoile::energieOG(const etoile& e1, const etoile& e2) {
-    double w = pulsation(e1, e2);
-    double mr = massetot(e1, e2) * ratiomasse(e1, e2);
-    return (2.0 / 5.0) * pow(G * mr, 2) * pow(e1.r, 4) * pow(w, 6) / pow(c, 5);
-}
-
-   
 // Fonction pour calculer la distance entre deux positions
 double distance(const etoile& e1, const etoile& e2)
 {
@@ -108,26 +90,141 @@ Position gravitationalForce(const etoile& e1, const etoile& e2) {
 }
 
 void calculateOrbitalVelocities(etoile& e1, etoile& e2) {
-   double dx = e2.x - e1.x, dy = e2.y - e1.y, dz = e2.z - e1.z;
-    double r = sqrt(dx * dx + dy * dy + dz * dz);
-    double ux = -dy / r, uy = dx / r;
+    // vecteur de séparation
+    double dx = e2.x - e1.x;
+    double dy = e2.y - e1.y;
+    double dz = e2.z - e1.z;
+    double r = sqrt(dx*dx + dy*dy + dz*dz);
+    if (r < 1e6) r = 1e6; // Assurer une distance minimale
+
+    // vecteur radial unitaire
+    double ux = dx / r;
+    double uy = dy / r;
+    // vecteur tangentiel unitaire (dans le plan XY)
+    double tx = -uy;
+    double ty = ux;
+
+    // vitesse circulaire (relative)
     double M = e1.m + e2.m;
-    double r1 = (e2.m / M) * r;
-    double r2 = (e1.m / M) * r;
-    double v = sqrt(G * M / r);
-    e1.vx = ux * v * (r1 / r); e1.vy = uy * v * (r1 / r);
-    e2.vx = -ux * v * (r2 / r); e2.vy = -uy * v * (r2 / r);
+    double v_circ = sqrt(G * M / r);  // Vitesse circulaire de chaque étoile
 
+    // répartition des vitesses pour chaque étoile en fonction de leurs masses
+    double v1 = v_circ * (e2.m / M);
+    double v2 = v_circ * (e1.m / M);
+
+    // étoile 1 : tangentiel uniquement
+    e1.vx = tx * v1;
+    e1.vy = ty * v1;
+    e1.vz = 0;
+
+    // étoile 2 : opposé tangentiel
+    e2.vx = -tx * v2;
+    e2.vy = -ty * v2;
+    e2.vz = 0;
 }
 
 
-// Fonction pour mettre à jour la position et la vitesse d'une étoile selon la force gravitationnelle
-void updateStar(etoile& e, const Position& force, double dt) {
- Position a = {force.x / e.m, force.y / e.m, force.z / e.m};
-    e.vx += a.x * dt; e.vy += a.y * dt; e.vz += a.z * dt;
-    e.x += e.vx * dt; e.y += e.vy * dt; e.z += e.vz * dt;
+/// Fonction pour calculer les vitesses orbitales des deux étoiles avec RK4
+etoile updateStarReturnRK4(const etoile& e, const Position& force, double dt, const etoile& autre) {
+    etoile updated = e;
 
+    // Calcul des positions et vitesses relatives
+    Position r_vec = {
+        autre.x - e.x,
+        autre.y - e.y,
+        autre.z - e.z
+    };
+    double r = sqrt(r_vec.x * r_vec.x + r_vec.y * r_vec.y + r_vec.z * r_vec.z);
+    if (r < 1e6) r = 1e6;  // Sécuriser contre une distance trop petite
+
+    // Calcul de l'accélération gravitationnelle
+    Position a_grav = {
+        force.x / e.m,
+        force.y / e.m,
+        force.z / e.m
+    };
+
+    // Calcul de la vitesse relative
+    Position v_rel = {
+        autre.vx - e.vx,
+        autre.vy - e.vy,
+        autre.vz - e.vz
+    };
+
+    // Produit scalaire v . r
+    double v_dot_r = v_rel.x * r_vec.x + v_rel.y * r_vec.y + v_rel.z * r_vec.z;
+
+    // Dissipation gravitationnelle (modèle de Peters-Mathews simplifié)
+    double coef = -(32.0 / 5.0) * pow(G, 3.5) * (e.m * autre.m / (e.m + autre.m)) * (e.m + autre.m) * sqrt(e.m + autre.m) / (pow(c, 5) * pow(r, 4.5));
+
+    // Calcul de l'accélération due aux ondes gravitationnelles
+    Position a_gw = {
+        coef * v_dot_r * r_vec.x / r / e.m,
+        coef * v_dot_r * r_vec.y / r / e.m,
+        coef * v_dot_r * r_vec.z / r / e.m
+    };
+
+    // Accélération totale
+    Position a_tot = {
+        a_grav.x + a_gw.x,
+        a_grav.y + a_gw.y,
+        a_grav.z + a_gw.z
+    };
+
+    // Variables de stockage pour RK4
+    Position k1v, k2v, k3v, k4v;
+    Position k1p, k2p, k3p, k4p;
+    
+    // Calcul des différentes étapes de Runge-Kutta
+    // 1. k1
+    k1v.x = a_tot.x * dt;
+    k1v.y = a_tot.y * dt;
+    k1v.z = a_tot.z * dt;
+
+    k1p.x = e.vx * dt;
+    k1p.y = e.vy * dt;
+    k1p.z = e.vz * dt;
+
+    // 2. k2
+    k2v.x = (a_tot.x + 0.5 * k1v.x) * dt;
+    k2v.y = (a_tot.y + 0.5 * k1v.y) * dt;
+    k2v.z = (a_tot.z + 0.5 * k1v.z) * dt;
+
+    k2p.x = (e.vx + 0.5 * k1v.x) * dt;
+    k2p.y = (e.vy + 0.5 * k1v.y) * dt;
+    k2p.z = (e.vz + 0.5 * k1v.z) * dt;
+
+    // 3. k3
+    k3v.x = (a_tot.x + 0.5 * k2v.x) * dt;
+    k3v.y = (a_tot.y + 0.5 * k2v.y) * dt;
+    k3v.z = (a_tot.z + 0.5 * k2v.z) * dt;
+
+    k3p.x = (e.vx + 0.5 * k2v.x) * dt;
+    k3p.y = (e.vy + 0.5 * k2v.y) * dt;
+    k3p.z = (e.vz + 0.5 * k2v.z) * dt;
+
+    // 4. k4
+    k4v.x = (a_tot.x + k3v.x) * dt;
+    k4v.y = (a_tot.y + k3v.y) * dt;
+    k4v.z = (a_tot.z + k3v.z) * dt;
+
+    k4p.x = (e.vx + k3v.x) * dt;
+    k4p.y = (e.vy + k3v.y) * dt;
+    k4p.z = (e.vz + k3v.z) * dt;
+
+    // Mise à jour des vitesses et positions
+    updated.vx += (k1v.x + 2.0 * k2v.x + 2.0 * k3v.x + k4v.x) / 6.0;
+    updated.vy += (k1v.y + 2.0 * k2v.y + 2.0 * k3v.y + k4v.y) / 6.0;
+    updated.vz += (k1v.z + 2.0 * k2v.z + 2.0 * k3v.z + k4v.z) / 6.0;
+
+    updated.x += (k1p.x + 2.0 * k2p.x + 2.0 * k3p.x + k4p.x) / 6.0;
+    updated.y += (k1p.y + 2.0 * k2p.y + 2.0 * k3p.y + k4p.y) / 6.0;
+    updated.z += (k1p.z + 2.0 * k2p.z + 2.0 * k3p.z + k4p.z) / 6.0;
+
+    return updated;
 }
+
+
 
 
 // Fonction pour enregistrer les données dans un fichier
@@ -137,3 +234,4 @@ void writeToFile(std::ofstream& file, double time, const etoile& e1, const etoil
          << e2.x / AU << " " << e2.y / AU << " " << e2.z / AU << "\n";
 }
 #endif
+

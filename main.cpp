@@ -11,7 +11,6 @@ using namespace std;
 
 int main() {
     
-    
 
     // Creation des etoiles
     etoile e1, e2;
@@ -31,19 +30,24 @@ int main() {
     // Calculer les vitesses orbitales des étoiles
     calculateOrbitalVelocities(e1, e2);
 
-    double dt = 8000; // Pas de temps en secondes
-    double totalTime = 365.25 * 24 * 7200; // Simuler pendant 1 an 
+    double dt = 10; // Pas de temps en secondes
+    double totalTime = 10e6; // Simuler pendant 1 an 
 
     // Boucle pour mettre à jour les positions et vitesses
     for (double t = 0; t < totalTime; t += dt) {
+
         // Calculer la force gravitationnelle entre les deux étoiles
         Position force = gravitationalForce(e1, e2);
 
-        // Mettre à jour les positions et vitesses des deux étoiles
-        updateStar(e1, force, dt);
-        updateStar(e2, {-force.x, -force.y, -force.z}, dt); // Force opposée pour la deuxième étoile
+        // Calculer les nouvelles positions et vitesses des deux étoiles avec RK4 (mise à jour croisée)
+        etoile newE1 = updateStarReturnRK4(e1, force, dt, e2);
+        etoile newE2 = updateStarReturnRK4(e2, {-force.x, -force.y, -force.z}, dt, e1);
 
-        // Enregistrer les positions dans le fichier tous les 30 jours 
+        // Mise à jour des vraies étoiles après calculs
+        e1 = newE1;
+        e2 = newE2;
+
+        // Enregistrer les positions dans le fichier tous les 30 jours
         if (static_cast<int>(t / dt) % 30 == 0) {
             writeToFile(dataFile, t / 86400, e1, e2);  
         }

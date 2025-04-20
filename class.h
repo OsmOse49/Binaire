@@ -20,6 +20,7 @@ struct Position {
     double x, y, z;
 };
 
+
 class etoile {
 public:
     double m, x, y, z, vx, vy, vz, r;
@@ -51,7 +52,8 @@ public:
 double distance(const etoile& e1, const etoile& e2);
 Position gravitationalForce(const etoile& e1, const etoile& e2);
 void calculateOrbitalVelocities(etoile& e1, etoile& e2);
-void updateStar(etoile& e, const Position& force, double dt);
+etoile updateStarReturn(const etoile& e, const Position& force, double dt, const etoile& autre);
 void writeToFile(std::ofstream& file, double time, const etoile& e1, const etoile& e2);
+
 
 #endif
