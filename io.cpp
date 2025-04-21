@@ -14,7 +14,7 @@ using namespace std;
 
 //Nouvelles variables
 
-double r, fx, fy;
+
 double dt = 10; // Pas de temps en secondes
 double totalTime = 10e6; // Simuler pendant 1 an 
 
