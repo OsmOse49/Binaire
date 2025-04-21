@@ -38,11 +38,11 @@ void etoile::afficheetoile() {
 void etoile::creeretoile() {
     cout << "Comment s'appelle l'etoile ? ";
     cin >> nom;
-    cout << "Quelle est la position x de l'etoile ? (en m)";
+    cout << "Quelle est la position x de l'etoile ? (en m) ";
     cin >> x;
-    cout << "Quelle est la position y de l'etoile ? (en m)";
+    cout << "Quelle est la position y de l'etoile ? (en m) ";
     cin >> y;
-    cout << "Quelle est la position z de l'etoile ? (en m)";
+    cout << "Quelle est la position z de l'etoile ? (en m) ";
     cin >> z;
 
     cout << "Quelle est la masse de l'etoile (en kg)? ";
