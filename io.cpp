@@ -1,3 +1,8 @@
+/*
+    Ceci est un menu, il permet de demander à l'utilisateur s'il souhaite modifier certains paramètres qu'il a saisi au début du code; ainsi il n'y a pas besoin de le relancer.
+    L'utilisateur dispose de plusieurs choix, il saisit le numéro correspondant puis modifie les paramètres. Une fois les nouveaux paramètres saisis, le code se relance.
+*/
+
 #include <cstdlib>
 #include <iostream>
 #include <cmath>
@@ -44,12 +49,12 @@ void menu(etoile& e1, etoile& e2)
             cout<<"1."<<e1.getnom()<<endl;
             cout<<"2."<<e2.getnom()<<endl;
             cin>>choix;
-        } while( choix !=1 && choix !=2);
+        } while( choix !=1 && choix !=2); //comme les paramètres sont privés on utilise les getters
         
     if (choix == 1 )
     {
         e1.set_mass();
-    }
+    } //comme on désire modifier les valeurs, on utilise les setters
    if (choix == 2 )
     {
         e2.set_mass();

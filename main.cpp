@@ -1,3 +1,9 @@
+/*
+    Ceci est le fichier main, il fait appel aux définitions, variables privées et publiques, fonctions, classes, structures... crées dans le fichier class.cpp ainsi qu'au menu crée dans io.cpp
+    Le main est le fichier qui est exécuté lorsque l'on compile le code
+*/
+
+
 #include "class.h"
 #include "class.cpp"
 #include <iostream>

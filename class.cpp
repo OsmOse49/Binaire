@@ -1,3 +1,7 @@
+/*
+    Ce fichier regroupe les définitions, variables privées et publiques, fonctions, classes, structures... de façon détaillées
+    Il permet d'implémenter
+*/
 #ifndef CLASS_CPP
 #define CLASS_CPP
 #include "class.h"
@@ -7,15 +11,15 @@ using namespace std;
 
 
 
-etoile::etoile() : m(0), x(0), y(0), z(0), vx(0), vy(0), vz(0), r(0),nom (""){} //constructeur de la classe
+etoile::etoile() : m(0), x(0), y(0), z(0), vx(0), vy(0), vz(0), r(0),nom (""){} //constructeur de la classe initialisé à 0 pour s'assurer de ne pas avoir des valeurs préremplies
 etoile::~etoile() {} // destructeur de la classe
 
-Position::Position() : x(0), y(0), z(0) {}
-Position::Position(double a, double b, double c)
+Position::Position() : x(0), y(0), z(0) {} //constructeur qui initialise à 0
+Position::Position(double a, double b, double c) //constructeur qui initialise avec les valeurs souhaitées
 {
     x=a, y=b, z=c;
 }
-Position::~Position() {}
+Position::~Position() {} // destructeur de la classe
 
 
 double etoile::getx() const { return x; } //comme les variables sont privée on ajoute des accesseurs 
@@ -42,9 +46,9 @@ void etoile::creeretoile() {
     cout << "Quelle est la position z de l'etoile ? ";
     cin >> z;
 
-    cout << "Quelle est la masse de l'etoile ? ";
+    cout << "Quelle est la masse de l'etoile (en kg)? ";
     cin >> m;
-    cout<<"Quel est le rayon de l'etoile ? ";
+    cout<<"Quel est le rayon de l'etoile ? (en m)";
     cin >> r;
     cout << endl;
     // Initialisation des vitesses à zéro
@@ -255,5 +259,5 @@ void writeToFile(std::ofstream& file, double time, const etoile& e1, const etoil
          << e2.getx() / AU << " " << e2.gety() / AU << " " << e2.getz() / AU << "\n";
 }
         
-#endif
+#endif //permet de s'assurer que le contenu du fichier ne sera inclus qu'une seule fois lors de la compilation
 
