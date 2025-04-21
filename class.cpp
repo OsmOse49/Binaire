@@ -11,7 +11,7 @@ using namespace std;
 
 
 
-etoile::etoile() : m(0), x(0), y(0), z(0), vx(0), vy(0), vz(0), r(0),nom (""){} //constructeur de la classe initialisé à 0 pour s'assurer de ne pas avoir des valeurs préremplies
+etoile::etoile() : m(0), x(0), y(0), z(0), vx(0), vy(0), vz(0),nom (""){} //constructeur de la classe initialisé à 0 pour s'assurer de ne pas avoir des valeurs préremplies
 etoile::~etoile() {} // destructeur de la classe
 
 Position::Position() : x(0), y(0), z(0) {} //constructeur qui initialise à 0
@@ -29,7 +29,6 @@ double etoile::getvx() const { return vx; }
 double etoile::getvy() const { return vy; }
 double etoile::getvz() const { return vz; }
 double etoile::getmass()const { return m; }
-double etoile::getr() const { return r; }
 string etoile::getnom() const { return nom; }
 
 void etoile::afficheetoile() {
@@ -39,17 +38,16 @@ void etoile::afficheetoile() {
 void etoile::creeretoile() {
     cout << "Comment s'appelle l'etoile ? ";
     cin >> nom;
-    cout << "Quelle est la position x de l'etoile ? ";
+    cout << "Quelle est la position x de l'etoile ? (en m)";
     cin >> x;
-    cout << "Quelle est la position y de l'etoile ? ";
+    cout << "Quelle est la position y de l'etoile ? (en m)";
     cin >> y;
-    cout << "Quelle est la position z de l'etoile ? ";
+    cout << "Quelle est la position z de l'etoile ? (en m)";
     cin >> z;
 
     cout << "Quelle est la masse de l'etoile (en kg)? ";
     cin >> m;
-    cout<<"Quel est le rayon de l'etoile ? (en m)";
-    cin >> r;
+
     cout << endl;
     // Initialisation des vitesses à zéro
     vx = 0;

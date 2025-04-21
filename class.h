@@ -54,7 +54,7 @@ public:
 
 class etoile {
 private:
-    double m, x, y, z, vx, vy, vz, r;
+    double m, x, y, z, vx, vy, vz;
     string nom;
 public:
     etoile(); //constructeur    
@@ -66,7 +66,6 @@ public:
     double getvy()const;
     double getvz()const;
     double getmass()const;
-    double getr()const;
     string getnom()const;
 
     void creeretoile(); //fonction qui demande à l'utilisateur de saisir les paramètres de l'étoile

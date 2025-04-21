@@ -4,7 +4,8 @@ import matplotlib.animation as animation
 
 
 # Spécifier le chemin du fichier data.txt
-file_path = '/home/utilisateur/Documents/M1 /Entrainement /Binaire/data.txt'
+file_path = 'C:\\Users\\arqel\\Desktop\\CPP\\Binaire-1\\data.txt'
+
 
 # Listes pour stocker les positions des étoiles
 time, star1_x, star1_y, star2_x, star2_y = [], [], [], [], []
